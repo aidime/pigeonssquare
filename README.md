@@ -1,2 +1,2 @@
 # pigeonssquare
-Devoir 2 POA
+Marion PELLICER, Paul SEICHAIS

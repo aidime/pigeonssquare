@@ -1,6 +1,6 @@
 
 
-public abstract class Pigeon {
+public abstract class Pigeon extends Thread{
 
 	/* 
 	   ------------------------
@@ -62,7 +62,50 @@ public abstract class Pigeon {
 		//TODO eats the food on his position if there is any
 	}
 	
-	private void moveTowardsPos(int posX, int posY) {
-		//TODO moves towards the point that has posX,posY as coordinates
+	private void moveTowardsPos(int posX, int posY) {		
+		double xDist = posX - _posX;
+		double yDist = posY - _posY;
+		double dist = Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2));
+		double xVel = xDist * _speed / dist;
+		double yVel = yDist * _speed / dist;
+
+		if (_posX < posX && (_posX + xVel) > posX) {
+			_posX = posX;
+		} else if (_posX != posX) {
+			_posX += xVel;
+		}
+		if (_posY < posY && (_posY + yVel) > posY) {
+			_posY = posY;
+		} else if (_posY != posY) {
+			_posY += yVel;
+		}
+		try {
+			Thread.sleep(10);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void moveAfraid() {
+		int cpt = 0;
+		_speed *= 2;
+		int x =(int)(Math.random()*1200);
+		int y = (int)(Math.random()*800);
+		while(cpt < 70) {
+			cpt++;
+			moveTowardsPos(x,y);
+			moveTowardsPos(x,y);
+			moveTowardsPos((int)(Math.random()*1200),(int)(Math.random()*800));
+		}
+		_speed /= 2;
+	}
+	
+	@Override
+	
+	public void run() {
+
+		while(true) {
+
+		}
 	}
 }

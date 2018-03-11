@@ -63,7 +63,6 @@ public abstract class Pigeon extends Thread {
 	*/
 	
 	private Food findClosestFood() {
-		//TODO finds the position of the closest food
 		Food f = (Food) objects.freshFood.get(0);
 		double min = objects.distanceObjet(this, f);
 		
@@ -76,11 +75,6 @@ public abstract class Pigeon extends Thread {
 		
 		return f;
 	}
-	/*
-	private void eatFood() {
-		//TODO eats the food on his position if there is any
-	}
-	*/
 	
 	private void moveTowardsPos(int posX, int posY) {		
 		double xDist = posX - _posX;
@@ -127,9 +121,9 @@ public abstract class Pigeon extends Thread {
 			Food f = null;
 			
 			try {				
-				// Tant qu'il reste des pétards
+				// Tant qu'il reste des pï¿½tards
 				while(!(objects.firecrackers.isEmpty())) {
-					//les pigeons sont effrayés
+					//les pigeons sont effrayï¿½s
 					moveAfraid();
 				}
 				
@@ -138,7 +132,7 @@ public abstract class Pigeon extends Thread {
 				if(!(objects.freshFood.isEmpty())) {
 					f = findClosestFood();
 	
-					//Si la nourriture est à proximité la manger
+					//Si la nourriture est ï¿½ proximitï¿½ la manger
 					if (objects.distanceObjet(this, f) < 20) {
 						f.eat();
 					}

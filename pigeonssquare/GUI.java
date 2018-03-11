@@ -61,14 +61,14 @@ public class GUI extends JFrame{
 		}
     }
 	
-	//Fenêtre d'affichage
+	//Fenï¿½tre d'affichage
 	private class Window extends JPanel {
 		
 		private static final long serialVersionUID = 1L;
-		Image pigeon = new ImageIcon().getImage();
-		Image burger = new ImageIcon().getImage();
-		Image burgerNoir = new ImageIcon().getImage();
-		Image bombe = new ImageIcon().getImage();
+		Image pigeon = new ImageIcon("Icons/Pigeon.png").getImage();
+		Image burger = new ImageIcon("Icons/Burger.png").getImage();
+		Image burgerNoir = new ImageIcon("Icons/BurgerNoir.png").getImage();
+		Image bombe = new ImageIcon("Icons/Bomb.png").getImage();
 		
 		// Fonction principale de dessin
 		@Override

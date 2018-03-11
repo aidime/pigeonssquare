@@ -2,7 +2,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.Timer;
 
-public class Food implements ActionListener {
+public class Food extends Objet implements ActionListener {
 
 	/* 
 	   ------------------------
@@ -14,7 +14,7 @@ public class Food implements ActionListener {
 	public int _posX;
 	public int _posY;
 	/* État de la nourriture : si isFresh est vrai, elle est fraiche */
-	public boolean isFresh;
+	public boolean _isFresh;
 	// Timer avant que la nourriture ne pourrisse
 	Timer t = new Timer(8000,this);
 
@@ -28,7 +28,7 @@ public class Food implements ActionListener {
 		
 		_posX = posX;
 		_posY = posY;
-		isFresh = true;
+		_isFresh = true;
 		t.start();
 	}
 	
@@ -39,7 +39,7 @@ public class Food implements ActionListener {
 	   ------------------------
 	*/
 	public boolean getComestible() {
-		return isFresh;
+		return _isFresh;
 	}
 	
 
@@ -50,37 +50,25 @@ public class Food implements ActionListener {
 	   ------------------------
 	*/	
 	// Eatting method
-	public synchronized void eat(Food f, Pigeon p) {
-		
+	public synchronized void eat() {		
+		synchronized(GUI.lockFresh) {
+			o.remove(o.freshFood, this);
+		}		
 	}
-/*
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		
-		// Si la nourriture est encore dans la liste, elle n'est plus comestible
-		if(lo.listN.indexOf(this) != -1) {
-			comestible = false;
-			
-			// Gestion de la concurrence pour les collections de nourritures
-			synchronized(Main.objectLockN) {
-				lo.remove(lo.listN, this);
-			}
-			synchronized(Main.objectLockN) {
-				lo.add(lo.listNP,this);
-			}
 
+	@Override
+	public void actionPerformed(ActionEvent arg0) {		
+		// Si la nourriture est encore dans la liste, elle n'est plus comestible
+		if(o.freshFood.indexOf(this) != -1) {
+			_isFresh= false;
+			
+			synchronized(GUI.lockFresh) {
+				o.remove(o.freshFood, this);
+			}
+			synchronized(GUI.lockNF) {
+				o.add(o.notFresh,this);
+			}
 		} 
 		t.stop();
-
-
-
-	}*/
-
-
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
-	
 }

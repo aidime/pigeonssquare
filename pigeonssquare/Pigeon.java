@@ -1,6 +1,6 @@
 
 
-public abstract class Pigeon extends Thread{
+public abstract class Pigeon extends Thread {
 
 	/* 
 	   ------------------------
@@ -12,7 +12,11 @@ public abstract class Pigeon extends Thread{
 	private int _posX;
 	private int _posY;
 	//vitesse du pigeon
-	private int _speed;
+	protected int _speed;
+	
+	public Objets objects;
+
+	public static Object objectLock = new Object();
 
 
 	/* 
@@ -26,6 +30,12 @@ public abstract class Pigeon extends Thread{
 		_posY = posY;
 		_speed = speed;
 	}
+	
+	public Pigeon(Objets objects){
+		_posX = (int) (Math.random()*500);
+		_posY = (int) (Math.random()*500);
+		this.objects = objects;
+	}
 
 
 	/* 
@@ -34,11 +44,11 @@ public abstract class Pigeon extends Thread{
 	   ------------------------
 	*/
 
-	public int getPosX() {
+	public int getX() {
 		return _posX;
 	}
 
-	public int getPosY() {
+	public int getY() {
 		return _posY;
 	}
 
@@ -52,15 +62,25 @@ public abstract class Pigeon extends Thread{
 	   ------------------------
 	*/
 	
-	private int[] findClosestFood() {
+	private Food findClosestFood() {
 		//TODO finds the position of the closest food
-		int [] res = new int[2];
-		return res;
+		Food f = (Food) objects.freshFood.get(0);
+		double min = objects.distanceObjet(this, f);
+		
+		for(Objet comestible : objects.freshFood) {
+			if(objects.distanceObjet(this, comestible) < min ) {
+				f = (Food) comestible;
+				min = (objects.distanceObjet(this, comestible));
+			}
+		}
+		
+		return f;
 	}
-	
+	/*
 	private void eatFood() {
 		//TODO eats the food on his position if there is any
 	}
+	*/
 	
 	private void moveTowardsPos(int posX, int posY) {		
 		double xDist = posX - _posX;
@@ -103,9 +123,45 @@ public abstract class Pigeon extends Thread{
 	@Override
 	
 	public void run() {
-
 		while(true) {
-
+			Food f = null;
+			
+			try {				
+				// Tant qu'il reste des pétards
+				while(!(objects.firecrackers.isEmpty())) {
+					//les pigeons sont effrayés
+					moveAfraid();
+				}
+				
+				//S'il y a de la nourriture sur le terrain,
+				//on calcule la nourriture la plus proche (min) ...
+				if(!(objects.freshFood.isEmpty())) {
+					f = findClosestFood();
+	
+					//Si la nourriture est à proximité la manger
+					if (objects.distanceObjet(this, f) < 20) {
+						f.eat();
+					}
+					//Sinon s'approcher
+					else {
+						moveTowardsPos(f.getX(), f.getY());
+					}
+	
+				}
+				
+				//Sinon ne rien faire
+				else {
+					synchronized(objectLock) {
+						try {
+							objectLock.wait();
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			} catch(Exception e) {
+				
+			}
 		}
 	}
 }

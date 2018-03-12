@@ -10,7 +10,8 @@ public class GUI extends JFrame{
 
 	private static final long serialVersionUID = 1L;
 	final static int nbPigeon = 10;
-	private Window window = new Window();
+	//private Window window = new Window();
+	private PlayZone playzone = new PlayZone();
 	static Pigeon[] tabPigeon = new Pigeon[nbPigeon];
 	static Objets objects;
 	
@@ -28,14 +29,15 @@ public class GUI extends JFrame{
     private void initUI() {		
 		objects = new Objets();
 		
-		window.setBackground(Color.GREEN);
-		
+		//window.setBackground(Color.GREEN);
+		playzone.setBackground(Color.LIGHT_GRAY);
 		setLayout(new BorderLayout());        
         setTitle("Pigeons Square");
         setSize(500, 500);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-		add("Center", window);
+		//add("Center", window);
+        add("Center", playzone);
 		setResizable(false);
 		setVisible(true);
 		
@@ -61,8 +63,47 @@ public class GUI extends JFrame{
 		}
     }
 	
+    
+private class PlayZone extends JPanel {
+		
+		private static final long serialVersionUID = 1L;
+		
+		// Fonction principale de dessin
+		@Override
+		public void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			
+			
+			for(Pigeon p : tabPigeon) {
+				g.setColor(Color.blue);
+				g.drawOval(p.getX(), p.getY(), 10, 10);
+			}
+			
+			//Concurrence
+			synchronized(lockFresh){
+				for(Objet n : objects.freshFood) {
+					g.setColor(Color.green);
+					g.drawOval(n.getX(), n.getY(), 10, 10);
+				}
+			}
+			synchronized(lockNF) {
+				for(Objet np : objects.notFresh) {
+					g.setColor(Color.black);
+					g.drawOval(np.getX(), np.getY(), 10, 10);
+					}
+				}
+			
+			for(Objet b: objects.firecrackers) {
+				g.setColor(Color.red);
+				g.drawOval(b.getX(), b.getY(), 10, 10);
+			}
+
+			repaint();
+		}
+		
+	}
 	//Fen�tre d'affichage
-	private class Window extends JPanel {
+	/*private class Window extends JPanel {
 		
 		private static final long serialVersionUID = 1L;
 		Image pigeon = new ImageIcon("Icons/Pigeon.png").getImage();
@@ -111,5 +152,5 @@ public class GUI extends JFrame{
 			repaint();
 		}
 		
-	}
+	}*/
 }

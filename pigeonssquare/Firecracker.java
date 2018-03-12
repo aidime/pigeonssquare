@@ -1,6 +1,5 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.Timer;
 
 public class Firecracker extends Objet implements ActionListener {
@@ -20,4 +19,5 @@ public class Firecracker extends Objet implements ActionListener {
 		o.remove(o.firecrackers, this);
 		t.stop();
 	}
+	
 }

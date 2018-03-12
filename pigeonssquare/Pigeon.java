@@ -32,8 +32,8 @@ public abstract class Pigeon extends Thread {
 	}
 	
 	public Pigeon(Objets objects){
-		_posX = (int) (Math.random()*500);
-		_posY = (int) (Math.random()*500);
+		_posX = (int) (Math.random()*1000);
+		_posY = (int) (Math.random()*1000);
 		this.objects = objects;
 	}
 
@@ -80,8 +80,8 @@ public abstract class Pigeon extends Thread {
 		double xDist = posX - _posX;
 		double yDist = posY - _posY;
 		double dist = Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2));
-		double xVel = xDist * _speed / dist;
-		double yVel = yDist * _speed / dist;
+		double xVel = xDist * _speed / 2 / dist;
+		double yVel = yDist * _speed / 2 / dist;
 
 		if (_posX < posX && (_posX + xVel) > posX) {
 			_posX = posX;
@@ -103,13 +103,13 @@ public abstract class Pigeon extends Thread {
 	public void moveAfraid() {
 		int cpt = 0;
 		_speed *= 2;
-		int x =(int)(Math.random()*1200);
-		int y = (int)(Math.random()*800);
+		int x =(int)(Math.random()*1000);
+		int y = (int)(Math.random()*1000);
 		while(cpt < 70) {
 			cpt++;
 			moveTowardsPos(x,y);
 			moveTowardsPos(x,y);
-			moveTowardsPos((int)(Math.random()*1200),(int)(Math.random()*800));
+			moveTowardsPos((int)(Math.random()*1000),(int)(Math.random()*1000));
 		}
 		_speed /= 2;
 	}
@@ -133,7 +133,7 @@ public abstract class Pigeon extends Thread {
 					f = findClosestFood();
 	
 					//Si la nourriture est � proximit� la manger
-					if (objects.distanceObjet(this, f) < 20) {
+					if (objects.distanceObjet(this, f) < 3) {
 						f.eat();
 					}
 					//Sinon s'approcher

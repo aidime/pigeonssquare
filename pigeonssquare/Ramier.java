@@ -8,11 +8,11 @@ public class Ramier extends Pigeon {
 	   ------------------------
 	*/
 	public Ramier(int posX, int posY, int speed) {
-		super(posX, posY, 5);
+		super(posX, posY, 1);
 	}
 	
 	public Ramier(Objets o) {
 		super(o);
-		_speed = 5;
+		_speed = 1;
 	}
 }

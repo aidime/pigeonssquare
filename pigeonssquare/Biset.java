@@ -7,12 +7,12 @@ public class Biset extends Pigeon {
 	   ------------------------
 	*/
 	public Biset(int posX, int posY, int speed) {
-		super(posX, posY, 8);
+		super(posX, posY, 3);
 	}
 	
 	public Biset(Objets o) {
 		super(o);
-		_speed = 8;
+		_speed = 3;
 	}
 
 }

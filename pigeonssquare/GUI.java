@@ -1,12 +1,15 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Image;
-import javax.swing.ImageIcon;
+//import java.awt.Image;
+//import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class GUI extends JFrame{
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
+public class GUI extends JFrame implements MouseListener {
 
 	private static final long serialVersionUID = 1L;
 	final static int nbPigeon = 10;
@@ -41,6 +44,9 @@ public class GUI extends JFrame{
 		setResizable(false);
 		setVisible(true);
 		
+		playzone.addMouseListener(this);
+        addMouseListener(this);
+		
 		//window.addMouseListener(this);
     }
 
@@ -61,96 +67,86 @@ public class GUI extends JFrame{
 		for(Pigeon p : tabPigeon) {
 			p.start();
 		}
+		
     }
 	
     
-private class PlayZone extends JPanel {
-		
-		private static final long serialVersionUID = 1L;
-		
-		// Fonction principale de dessin
-		@Override
-		public void paintComponent(Graphics g) {
-			super.paintComponent(g);
+	private class PlayZone extends JPanel {
 			
+			private static final long serialVersionUID = 1L;
 			
-			for(Pigeon p : tabPigeon) {
-				g.setColor(Color.blue);
-				g.drawOval(p.getX(), p.getY(), 10, 10);
-			}
-			
-			//Concurrence
-			synchronized(lockFresh){
-				for(Objet n : objects.freshFood) {
-					g.setColor(Color.green);
-					g.drawOval(n.getX(), n.getY(), 10, 10);
+			// Fonction principale de dessin
+			@Override
+			public void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				
+				
+				for(Pigeon p : tabPigeon) {
+					g.setColor(Color.blue);
+					g.drawOval(p.getX(), p.getY(), 10, 10);
 				}
-			}
-			synchronized(lockNF) {
-				for(Objet np : objects.notFresh) {
-					g.setColor(Color.black);
-					g.drawOval(np.getX(), np.getY(), 10, 10);
+				
+				//Concurrence
+				synchronized(lockFresh){
+					for(Objet n : objects.freshFood) {
+						g.setColor(Color.green);
+						g.drawOval(n.getX(), n.getY(), 10, 10);
 					}
 				}
-			
-			for(Objet b: objects.firecrackers) {
-				g.setColor(Color.red);
-				g.drawOval(b.getX(), b.getY(), 10, 10);
+				synchronized(lockNF) {
+					for(Objet np : objects.notFresh) {
+						g.setColor(Color.black);
+						g.drawOval(np.getX(), np.getY(), 10, 10);
+						}
+					}
+				
+				for(Objet b: objects.firecrackers) {
+					g.setColor(Color.red);
+					g.drawOval(b.getX(), b.getY(), 10, 10);
+				}
+	
+				repaint();
 			}
-
-			repaint();
+			
 		}
+
+	@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			MouseX = e.getX();
+			MouseY = e.getY();
+			Food food = new Food(MouseX,MouseY);
+			
+			objects.freshFood.add(food);
+			
+			synchronized(Pigeon.objectLock) {
+				Pigeon.objectLock.notifyAll();
+			}
+		}
+	
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
 		
 	}
-	//Fen�tre d'affichage
-	/*private class Window extends JPanel {
+	
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
 		
-		private static final long serialVersionUID = 1L;
-		Image pigeon = new ImageIcon("Icons/Pigeon.png").getImage();
-		Image burger = new ImageIcon("Icons/Burger.png").getImage();
-		Image burgerNoir = new ImageIcon("Icons/BurgerNoir.png").getImage();
-		Image bombe = new ImageIcon("Icons/Bomb.png").getImage();
+	}
+	
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
 		
-		// Fonction principale de dessin
-		@Override
-		public void paintComponent(Graphics g) {
-			super.paintComponent(g);
-			
-			
-			for(Pigeon p : tabPigeon) {
-				g.drawImage(pigeon,
-						    (int) (p.getX()-(pigeon.getWidth(window)/2)),
-						    (int) (p.getY()-(pigeon.getHeight(window)/2)),
-						    this);
-			}
-			
-			//Concurrence
-			synchronized(lockFresh){
-				for(Objet n : objects.freshFood) {
-					g.drawImage(burger,
-							    n.getX()-(burger.getWidth(window)/2),
-							    n.getY()-(burger.getHeight(window)/2),
-							    this);
-				}
-			}
-			synchronized(lockNF) {
-				for(Objet np : objects.notFresh) {
-					g.drawImage(burgerNoir,
-							    np.getX()-(burgerNoir.getWidth(window)/2),
-							    np.getY()-(burgerNoir.getHeight(window)/2),
-							    this);
-					}
-				}
-			
-			for(Objet b: objects.firecrackers) {
-				g.drawImage(bombe,
-						    b.getX()-(bombe.getWidth(window)/2),
-						    b.getY()-(bombe.getHeight(window)/2),
-						    this);
-			}
-
-			repaint();
-		}
+	}
+	
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
 		
-	}*/
+	}
+	
+	
 }
